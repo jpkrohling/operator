@@ -1,0 +1,7 @@
+apiVersion: backend.tracingshift/v1alpha1
+kind: DistributedTracing
+metadata:
+  name: distributedtracing-sample
+spec:
+  # Add fields here
+  agentType: opentelemetry

@@ -1,0 +1,24 @@
+# permissions for end users to edit distributedtracings.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: distributedtracing-editor-role
+rules:
+- apiGroups:
+  - backend.tracingshift
+  resources:
+  - distributedtracings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - backend.tracingshift
+  resources:
+  - distributedtracings/status
+  verbs:
+  - get
