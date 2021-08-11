@@ -1,0 +1,6 @@
+domain: tracingshift
+layout:
+- go.kubebuilder.io/v3
+projectName: operator
+repo: github.com/tracingshift/operator
+version: "3"
