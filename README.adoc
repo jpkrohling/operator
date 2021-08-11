@@ -1,0 +1,27 @@
+= TracingShift
+
+image:https://github.com/tracingshift/operator/workflows/Continuous%20Integration/badge.svg[Continuous Integration, link=https://github.com/tracingshift/operator/actions]
+image:https://goreportcard.com/badge/github.com/tracingshift/operator[Go Report Card, link=https://goreportcard.com/report/github.com/tracingshift/operator]
+image:https://godoc.org/github.com/tracingshift/operator?status.svg[GoDoc, link=https://godoc.org/github.com/tracingshift/operator/pkg/apis/]
+
+TracingShift is a Kubernetes operator that provisions and manages a distributed tracing infrastructure for your Kubernetes-based clusters.
+
+== Getting started
+
+Coming soon.
+
+== TracingShift vs. Kubernetes vs. Jaeger Operator vs. OpenTelemetry Operator
+
+We strive to be compatible with the widest range of Kubernetes versions as possible, but some changes to Kubernetes itself require us to break compatibility with older Kubernetes versions, be it because of code incompatibilities, or in the name of maintainability.
+
+Our promise is that we'll follow what's common practice in the Kubernetes world and support N-2 versions, based on the release date of the TracingShift.
+
+Given that it would be too costly to test all possible combinations of Kubernetes, Jaeger Operator, and OpenTelemetry Operator versions, we'll only test against the latest versions of the other operators. This is based on the premise that those operators will keep backwards compatibility with the CRD they publish.
+
+TracingShift *might* work on versions outside of the given range, but when opening new issues, please make sure to test your scenario on a supported version.
+
+.Test matrix
+|===
+|TracingShift | Kubernetes       | Jaeger Operator | OpenTelemetry Operator 
+| 0.0.1       | 1.20, 1.21, 1.22 | 1.24            | 0.31.0
+|===
