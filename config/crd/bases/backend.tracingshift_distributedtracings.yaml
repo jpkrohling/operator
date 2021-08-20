@@ -20,7 +20,7 @@ spec:
     schema:
       openAPIV3Schema:
         description: DistributedTracing is the Schema for the distributedtracings
-          API
+          API.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -35,15 +35,93 @@ spec:
           metadata:
             type: object
           spec:
-            description: DistributedTracingSpec defines the desired state of DistributedTracing
+            description: DistributedTracingSpec defines the desired state of DistributedTracing.
             properties:
-              agentType:
-                description: 'AgentType defines whether the agent should be an OpenTelemetry
-                  Collector or a Jaeger Agent. Possible values: "jaeger" or "opentelemetry".'
-                type: string
+              agent:
+                description: 'Agent defines the configuration for the agents used
+                  as part of this distributed tracing backend. Optional. Default:
+                  no agent.'
+                properties:
+                  enabled:
+                    description: 'Enabled specifies whether we should deploy an agent
+                      for this distributed tracing backend. Optional. Default: true.'
+                    type: boolean
+                  mode:
+                    description: 'Mode represents how the agent should be deployed
+                      (daemonset, sidecar). Optional. Default: sidecar.'
+                    enum:
+                    - daemonset
+                    - sidecar
+                    type: string
+                  type:
+                    description: 'Type represents which agent should be used (jaeger,
+                      opentelemetry). Optional. Default: opentelemetry.'
+                    enum:
+                    - jaeger
+                    - opentelemetry
+                    type: string
+                type: object
+              pipeline:
+                description: Pipeline specifies how the collection pipeline should
+                  be for this distributed tracing backend. Required, with at least
+                  one collector.
+                items:
+                  description: DistributedTracingCollectorSpec defines how a collector
+                    of the pipeline should look like.
+                  properties:
+                    mode:
+                      description: Mode represents how the collector should be deployed
+                        (daemonset, deployment, statefulset).
+                      enum:
+                      - daemonset
+                      - deployment
+                      - statefulset
+                      type: string
+                    name:
+                      description: Name specifies a name for this entry in the pipeline.
+                      type: string
+                    type:
+                      description: Type represents which collector should be used
+                        (jaeger, opentelemetry, loadbalancer).
+                      enum:
+                      - jaeger
+                      - opentelemetry
+                      - loadbalancer
+                      type: string
+                  type: object
+                type: array
+              storage:
+                description: 'Storage defines the configuration for the persistent
+                  storage used as part of this distributed tracing backend. Optional.
+                  Default: in-memory if the last collector in the pipeline is Jaeger'
+                properties:
+                  elasticsearch:
+                    description: Elasticsearch defines the configuration for the Elasticsearch
+                      storage used as part of this distributed tracing backend.
+                    properties:
+                      urls:
+                        description: URLs defines the Elasticsearch URLs to use.
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  enabled:
+                    description: Enabled specifies whether we should deploy the storage
+                      for this distributed tracing backend. When set to false, we
+                      will still use the other properties to configure the pipeline
+                      to send data to the specified location, assuming that the storage
+                      is being managed by other process.
+                    type: boolean
+                  type:
+                    description: 'Type represents which storage to use for this distributed
+                      tracing backend. Supported values: elasticsearch.'
+                    enum:
+                    - elasticsearch
+                    type: string
+                type: object
             type: object
           status:
-            description: DistributedTracingStatus defines the observed state of DistributedTracing
+            description: DistributedTracingStatus defines the observed state of DistributedTracing.
             type: object
         type: object
     served: true

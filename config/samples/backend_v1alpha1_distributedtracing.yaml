@@ -1,7 +1,35 @@
 apiVersion: backend.tracingshift/v1alpha1
 kind: DistributedTracing
 metadata:
-  name: distributedtracing-sample
+  name: my-tracing-backend
 spec:
-  # Add fields here
-  agentType: opentelemetry
+  agent:
+    enabled: true
+    type: opentelemetry
+    mode: sidecar
+
+  pipeline:
+    # a load balancer makes sense if we are doing tail-based sampling
+    # in the usual case, we'd rely on the client-side balancing from the gRPC client at the sidecars
+    - name: loadbalancer
+      mode: deployment
+      type: loadbalancer
+
+    # do we want to allow people to specify a configmap? do we want to parse their configmaps to override the next destination?
+    - name: tail-based-sampling
+      mode: statefulset
+      type: opentelemetry
+
+    # the final destination
+    - name: backend
+      mode: deployment
+      type: jaeger
+
+  storage:
+    type: elasticsearch
+    elasticsearch:
+      server-urls: http://elasticsearch-host:9200
+      username: elastic
+      password: elastic
+      num-replicas: 1
+      num-shards: 5
